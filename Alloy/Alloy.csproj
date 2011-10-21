@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlloyClient.cs" />
+    <Compile Include="AlloyProtocol.cs" />
+    <Compile Include="AlloyServer.cs" />
+    <Compile Include="Messages\AlloyMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
