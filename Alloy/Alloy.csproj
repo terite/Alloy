@@ -43,8 +43,13 @@
     <Compile Include="AlloyClient.cs" />
     <Compile Include="AlloyProtocol.cs" />
     <Compile Include="AlloyServer.cs" />
+    <Compile Include="IClientMachine.cs" />
+    <Compile Include="IHostMachine.cs" />
+    <Compile Include="IMachine.cs" />
     <Compile Include="Messages\AlloyMessage.cs" />
+    <Compile Include="Messages\ScreensChangedMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Screen.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tempest\Desktop\Tempest\Tempest.csproj">

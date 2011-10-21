@@ -2,7 +2,7 @@
 
 namespace Alloy
 {
-	public class AlloyServer
+	public sealed class AlloyServer
 		: ServerBase
 	{
 		public AlloyServer()

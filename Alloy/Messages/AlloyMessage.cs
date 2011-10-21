@@ -6,6 +6,7 @@ namespace Alloy.Messages
 		: ushort
 	{
 		Login = 1,
+		ScreensChanged = 2,
 	}
 
 	public abstract class AlloyMessage
