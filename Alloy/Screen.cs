@@ -1,14 +1,15 @@
-﻿using Tempest;
+﻿using System;
+using Tempest;
 
 namespace Alloy
 {
 	public sealed class Screen
-		: ISerializable
 	{
-		public Screen (int height, int width)
+		public Screen (int height, int width, int order)
 		{
 			Height = height;
 			Width = width;
+			Order = order;
 		}
 
 		/// <summary>
@@ -29,16 +30,32 @@ namespace Alloy
 			private set;
 		}
 
-		public void Serialize (ISerializationContext context, IValueWriter writer)
+		/// <summary>
+		/// Gets the 0-based position of the screen, from left to right.
+		/// </summary>
+		public int Order
 		{
-			writer.WriteInt32 (Height);
-			writer.WriteInt32 (Width);
+			get;
+			private set;
+		}
+	}
+
+	internal sealed class ScreenSerializer
+		: ISerializer<Screen>
+	{
+		public void Serialize (ISerializationContext context, IValueWriter writer, Screen element)
+		{
+			if (element == null)
+				throw new ArgumentNullException ("element");
+
+			writer.WriteInt32 (element.Height);
+			writer.WriteInt32 (element.Width);
+			writer.WriteInt32 (element.Order);
 		}
 
-		public void Deserialize (ISerializationContext context, IValueReader reader)
+		public Screen Deserialize (ISerializationContext context, IValueReader reader)
 		{
-			Height = reader.ReadInt32();
-			Width = reader.ReadInt32();
+			return new Screen (reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32());
 		}
 	}
 }
