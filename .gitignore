@@ -3,3 +3,5 @@ obj
 *.user
 *.dotCover
 *.suo
+*.pidb
+*.userprefs
