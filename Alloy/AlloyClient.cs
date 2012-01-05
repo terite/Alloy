@@ -14,7 +14,7 @@ namespace Alloy
 				throw new ArgumentNullException ("machine");
 
 			this.machine = machine;
-			this.machine.ScreensChanged += OnMachineScreensChanged;
+			this.machine.ScreenChanged += OnMachineScreensChanged;
 		}
 		
 		private readonly IClientMachine machine;
@@ -33,7 +33,7 @@ namespace Alloy
 
 		private void ChangeScreens()
 		{
-			this.connection.Send (new ScreensChangedMessage (this.machine.Screens));
+			this.connection.Send (new ScreenChangedMessage (this.machine.Screens));
 		}
 	}
 }
