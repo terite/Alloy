@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("Eric Maupin and David Stensland")]
 [assembly: AssemblyProduct ("Alloy")]
-[assembly: AssemblyCopyright ("Copyright © Eric Maupin and David Stensland 2011")]
+[assembly: AssemblyCopyright ("Copyright © Eric Maupin and David Stensland 2012")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 

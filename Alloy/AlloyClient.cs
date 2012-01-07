@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Threading.Tasks;
 using Alloy.Messages;
 using Tempest;
 
@@ -7,7 +9,7 @@ namespace Alloy
 	public sealed class AlloyClient
 		: ClientBase
 	{
-		public AlloyClient (IClientMachine machine, IClientConnection clientConnection)
+		public AlloyClient (IMachine machine, IClientConnection clientConnection)
 			: base (clientConnection, MessageTypes.Reliable)
 		{
 			if (machine == null)
@@ -16,24 +18,43 @@ namespace Alloy
 			this.machine = machine;
 			this.machine.ScreenChanged += OnMachineScreensChanged;
 		}
+
+		public Task<ConnectionResult> ConnectAsync (EndPoint endPoint, string password)
+		{
+			return ConnectAsync (endPoint)
+				.ContinueWith (t =>
+				{
+					if (t.Result == ConnectionResult.Success)
+					{
+						return Connection.SendFor<ConnectResultMessage> (new ConnectMessage { Password = password })
+							.ContinueWith (ct =>
+							{
+								switch (ct.Result.Result)
+								{
+									case ConnectResult.Success:
+										return ConnectionResult.Success;
+									case ConnectResult.FailedPassword:
+										return ConnectionResult.FailedHandshake;
+									default:
+										return ConnectionResult.FailedUnknown;
+								}
+							}).Result;
+					}
+
+					return t.Result;
+				});
+		}
 		
-		private readonly IClientMachine machine;
+		private readonly IMachine machine;
 
 		private void OnMachineScreensChanged (object sender, EventArgs e)
 		{
 			ChangeScreens();
 		}
 
-		protected override void OnConnected (EventArgs e)
-		{
-			base.OnConnected(e);
-			
-			ChangeScreens();
-		}
-
 		private void ChangeScreens()
 		{
-			this.connection.Send (new ScreenChangedMessage (this.machine.Screens));
+			this.connection.Send (new ScreenChangedMessage (this.machine.Screen));
 		}
 	}
 }

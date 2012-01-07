@@ -5,8 +5,11 @@ namespace Alloy.Messages
 	public enum AlloyMessageType
 		: ushort
 	{
-		Login = 1,
+		Connect = 1,
+		ConnectResult = 2,
 		ScreenChanged = 3,
+		MouseEvent = 4,
+		KeyboardEvent = 5
 	}
 
 	public abstract class AlloyMessage

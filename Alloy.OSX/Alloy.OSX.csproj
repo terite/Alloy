@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{442FC6D9-749F-48FB-BFF0-8B69A17C742F}</ProjectGuid>
+    <ProjectGuid>{0D93133F-C0BE-4BA8-B6AB-F36F9F9495DD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Alloy.Windows</RootNamespace>
-    <AssemblyName>Alloy.Windows</AssemblyName>
+    <RootNamespace>Alloy.OSX</RootNamespace>
+    <AssemblyName>Alloy.OSX</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,10 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DEVMODE.cs" />
-    <Compile Include="Interop.cs" />
+    <Compile Include="OSXMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WindowsMachine.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Alloy\Alloy.csproj">
