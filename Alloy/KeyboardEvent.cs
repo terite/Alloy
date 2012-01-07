@@ -45,12 +45,19 @@ namespace Alloy
 
 		public void Serialize (ISerializationContext context, IValueWriter writer, KeyboardEvent element)
 		{
-			throw new NotImplementedException();
+			// TODO: combine type and code into single byte
+			writer.WriteByte ((byte)element.Type);
+			writer.WriteUInt16 ((ushort)element.Modifiers);
+			writer.WriteByte ((byte)element.Code);
 		}
 
 		public KeyboardEvent Deserialize (ISerializationContext context, IValueReader reader)
 		{
-			throw new NotImplementedException();
+			KeyboardEventType type = (KeyboardEventType) reader.ReadByte();
+			KeyModifiers modifiers = (KeyModifiers) reader.ReadUInt16();
+			KeyCode code = (KeyCode) reader.ReadByte();
+
+			return new KeyboardEvent (type, modifiers, code);
 		}
 	}
 }
