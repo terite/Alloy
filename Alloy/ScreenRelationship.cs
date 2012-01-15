@@ -32,13 +32,13 @@ namespace Alloy
 			set;
 		}
 
-		public int StartPercent
+		public short StartPercent
 		{
 			get;
 			set;
 		}
 
-		public int EndPercent
+		public short EndPercent
 		{
 			get;
 			set;
@@ -50,12 +50,23 @@ namespace Alloy
 	{
 		public void Serialize (ISerializationContext context, IValueWriter writer, ScreenRelationship element)
 		{
-			throw new NotImplementedException();
+			writer.WriteByte ((byte) element.Direction);
+			writer.WriteString (element.Origin);
+			writer.WriteString (element.Destination);
+			writer.WriteInt16 (element.StartPercent);
+			writer.WriteInt16 (element.EndPercent);
 		}
 
 		public ScreenRelationship Deserialize (ISerializationContext context, IValueReader reader)
 		{
-			throw new NotImplementedException();
+			ScreenRelationship relationship = new ScreenRelationship();
+			relationship.Direction = (Direction) reader.ReadByte();
+			relationship.Origin = reader.ReadString();
+			relationship.Destination = reader.ReadString();
+			relationship.StartPercent = reader.ReadInt16();
+			relationship.EndPercent = reader.ReadInt16();
+
+			return relationship;
 		}
 	}
 }
