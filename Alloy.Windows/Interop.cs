@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Alloy.Windows
 {
@@ -15,8 +12,13 @@ namespace Alloy.Windows
 		public int Bottom;
 	}
 
-	internal class Interop
+	internal delegate int HookProc (int nCode, int wParam, int lParam);
+
+	internal static class Interop
 	{
+		public const int WH_KEYBOARD = 2;
+		public const int WH_MOUSE = 7;
+
 		[DllImport ("user32.dll")]
 		public static extern IntPtr GetForegroundWindow();
 
@@ -25,5 +27,14 @@ namespace Alloy.Windows
 
 		[DllImport ("user32.dll")]
 		public static extern IntPtr GetShellWindow();
+
+		[DllImport ("user32.dll")]
+		public static extern int CallNextHookEx (int idHook, int nCode, int wParam, int lParam);
+
+		[DllImport ("user32.dll")]
+		public static extern int SetWindowsHookEx (int idHook, HookProc lpfn, IntPtr hInstance, int threadId);
+
+		[DllImport ("user32.dll")]
+		public static extern bool UnhookWindowsHookEx (int idHook);
 	}
 }
