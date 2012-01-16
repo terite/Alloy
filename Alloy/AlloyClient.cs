@@ -17,6 +17,12 @@ namespace Alloy
 
 			this.machine = machine;
 			this.machine.ScreenChanged += OnMachineScreensChanged;
+			this.machine.KeyboardEvent += OnKeyboardEvent;
+			this.machine.MouseEvent += OnMouseEvent;
+
+			this.RegisterMessageHandler<MachineStateMessage> (OnMachineStateMessage);
+			this.RegisterMessageHandler<MouseEventMessage> (OnMouseEventMessage);
+			this.RegisterMessageHandler<KeyboardEventMessage> (OnKeyboardEventMessage);
 		}
 
 		public Task<ConnectionResult> ConnectAsync (EndPoint endPoint, string password)
@@ -46,6 +52,41 @@ namespace Alloy
 		}
 		
 		private readonly IMachine machine;
+		private bool isActive;
+
+		private void OnMouseEvent (object sender, MouseEventArgs e)
+		{
+			if (!this.isActive)
+				return;
+
+			e.Handled = true;
+			this.connection.Send (new MouseEventMessage { Event = e.Event });
+		}
+
+		private void OnKeyboardEvent (object sender, KeyboardEventArgs e)
+		{
+			if (!this.isActive)
+				return;
+
+			e.Handled = true;
+			this.connection.Send (new KeyboardEventMessage { Event = e.Event });
+		}
+
+		private void OnKeyboardEventMessage (MessageEventArgs<KeyboardEventMessage> e)
+		{
+			this.machine.InvokeKeyboardEvent (e.Message.Event);
+		}
+
+		private void OnMouseEventMessage (MessageEventArgs<MouseEventMessage> e)
+		{
+			this.machine.InvokeMouseEvent (e.Message.Event);
+		}
+
+		private void OnMachineStateMessage (MessageEventArgs<MachineStateMessage> e)
+		{
+			this.isActive = e.Message.IsActive;
+			this.machine.SetCursorVisibility (e.Message.IsActive);
+		}
 
 		private void OnMachineScreensChanged (object sender, EventArgs e)
 		{
