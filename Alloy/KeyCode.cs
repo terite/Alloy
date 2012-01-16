@@ -6,6 +6,7 @@ namespace Alloy
 	public enum KeyModifiers
 		: ushort
 	{
+		None = 0,
 		LeftControl = 1,
 		RightControl = 2,
 		LeftAlt = 4,
