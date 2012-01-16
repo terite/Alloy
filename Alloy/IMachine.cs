@@ -75,6 +75,12 @@ namespace Alloy
 			get;
 			private set;
 		}
+
+		public bool Handled
+		{
+			get;
+			set;
+		}
 	}
 
 	public class KeyboardEventArgs
@@ -88,6 +94,12 @@ namespace Alloy
 		}
 
 		public KeyboardEvent Event
+		{
+			get;
+			set;
+		}
+
+		public bool Handled
 		{
 			get;
 			set;
