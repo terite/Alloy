@@ -12,11 +12,21 @@ namespace Alloy
 
 	public class KeyboardEvent
 	{
-		public KeyboardEvent (KeyboardEventType type, KeyModifiers modifiers, KeyCode code)
+		public KeyboardEvent (KeyboardEventType type, KeyModifiers modifiers, KeyCode code, int repeatCount)
 		{
+			if (repeatCount <= 0)
+				throw new ArgumentException ("repeatCount must be greater than 0", "repeatCount");
+
 			Type = type;
 			Modifiers = modifiers;
 			Code = code;
+			RepeatCount = repeatCount;
+		}
+
+		public int RepeatCount
+		{
+			get;
+			private set;
 		}
 
 		public KeyboardEventType Type

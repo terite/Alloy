@@ -50,7 +50,7 @@ namespace Alloy.Windows
 			var kev = KeyboardEvent;
 			if (kev != null)
 			{
-				var args = new KeyboardEventArgs (new KeyboardEvent (KeyboardEventType.Up, KeyModifiers.None, KeyCode.A));
+				var args = new KeyboardEventArgs (new KeyboardEvent (KeyboardEventType.Up, KeyModifiers.None, KeyCode.A, 1));
 				kev (this, args);
 				stop = args.Handled;
 			}
