@@ -9,7 +9,8 @@ namespace Alloy.Messages
 		ConnectResult = 2,
 		ScreenChanged = 3,
 		MouseEvent = 4,
-		KeyboardEvent = 5
+		KeyboardEvent = 5,
+		MachineState = 6
 	}
 
 	public abstract class AlloyMessage

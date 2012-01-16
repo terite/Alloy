@@ -46,6 +46,7 @@
     <Compile Include="IMachine.cs" />
     <Compile Include="KeyboardEvent.cs" />
     <Compile Include="KeyCode.cs" />
+    <Compile Include="Messages\MachineStateMessage.cs" />
     <Compile Include="Messages\AlloyMessage.cs" />
     <Compile Include="Messages\ConnectMessage.cs" />
     <Compile Include="Messages\ConnectResultMessage.cs" />
