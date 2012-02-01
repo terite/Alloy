@@ -12,7 +12,7 @@ namespace Alloy
 
 	public class KeyboardEvent
 	{
-		public KeyboardEvent (KeyboardEventType type, KeyModifiers modifiers, KeyCode code, int repeatCount)
+		public KeyboardEvent (KeyboardEventType type, KeyModifiers modifiers, KeyCode code, byte repeatCount)
 		{
 			if (repeatCount <= 0)
 				throw new ArgumentException ("repeatCount must be greater than 0", "repeatCount");
@@ -23,7 +23,7 @@ namespace Alloy
 			RepeatCount = repeatCount;
 		}
 
-		public int RepeatCount
+		public byte RepeatCount
 		{
 			get;
 			private set;
@@ -59,6 +59,7 @@ namespace Alloy
 			writer.WriteByte ((byte)element.Type);
 			writer.WriteUInt16 ((ushort)element.Modifiers);
 			writer.WriteByte ((byte)element.Code);
+			writer.WriteByte (element.RepeatCount);
 		}
 
 		public KeyboardEvent Deserialize (ISerializationContext context, IValueReader reader)
@@ -66,8 +67,9 @@ namespace Alloy
 			KeyboardEventType type = (KeyboardEventType) reader.ReadByte();
 			KeyModifiers modifiers = (KeyModifiers) reader.ReadUInt16();
 			KeyCode code = (KeyCode) reader.ReadByte();
+			byte repeatCount = reader.ReadByte();
 
-			return new KeyboardEvent (type, modifiers, code);
+			return new KeyboardEvent (type, modifiers, code, repeatCount);
 		}
 	}
 }
