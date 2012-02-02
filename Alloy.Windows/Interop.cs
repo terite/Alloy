@@ -57,6 +57,21 @@ namespace Alloy.Windows
 
 	internal delegate int HookProc (int nCode, int wParam, int lParam);
 
+	internal enum SystemMetric
+	{
+		XScreen = 0,
+		YScreen = 1,
+		XBorder = 5,
+		YBorder = 6,
+		XFullscreen = 16,
+		YFullscreen = 17,
+		XVirtualScreen = 76,
+		YVirtualScreen = 77,
+		VirtualScreenWidth = 78,
+		VirtualScreenHeight = 79,
+		Monitors = 80,
+	}
+
 	internal static class Interop
 	{
 		public const int WH_KEYBOARD = 2;
@@ -84,7 +99,10 @@ namespace Alloy.Windows
 		public static extern uint SendInput (uint nInputs, [MarshalAs(UnmanagedType.LPArray, SizeConst = 1)] INPUT[] pInputs, Int32 cbSize);
 
 		[DllImport ("user32.dll")]
-		public static extern extern uint MapVirtualKey (uint uCode, VirtualMapType uMapType);
+		public static extern uint MapVirtualKey (uint uCode, VirtualMapType uMapType);
+
+		[DllImport ("user32.dll")]
+		public static extern int GetSystemMetrics (SystemMetric metric);
 	}
 
 	internal enum VirtualMapType
