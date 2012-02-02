@@ -54,8 +54,12 @@ namespace Alloy
 		private readonly IMachine machine;
 		private bool isActive;
 
+		private Position lastPosition;
+
 		private void OnMouseEvent (object sender, MouseEventArgs e)
 		{
+			this.lastPosition = e.Event.Position;
+
 			if (!this.isActive)
 				return;
 
@@ -76,10 +80,23 @@ namespace Alloy
 		{
 			this.machine.InvokeKeyboardEvent (e.Message.Event);
 		}
-
+		
 		private void OnMouseEventMessage (MessageEventArgs<MouseEventMessage> e)
 		{
-			this.machine.InvokeMouseEvent (e.Message.Event);
+			MouseEvent ev = e.Message.Event;
+			if (ev.Type == MouseEventType.Move)
+				ev = ApplyDeltas (ev);
+
+			this.machine.InvokeMouseEvent (ev);
+		}
+
+		private MouseEvent ApplyDeltas (MouseEvent ev)
+		{
+			Position p = this.lastPosition;
+			p.X += ev.Position.X;
+			p.Y += ev.Position.Y;
+
+			return new MouseEvent (ev.Type, p);
 		}
 
 		private void OnMachineStateMessage (MessageEventArgs<MachineStateMessage> e)
