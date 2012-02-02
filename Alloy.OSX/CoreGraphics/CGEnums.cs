@@ -44,5 +44,28 @@ namespace MonoMac.CoreGraphics
 		SessionEventTap,
 		AnnotatedSessionEventTap
 	}
+	
+	public enum CGEventType : uint
+	{
+		kCGEventNull = 0,
+		kCGEventLeftMouseDown = 1,
+		kCGEventLeftMouseUp = 2,
+		kCGEventRightMouseDown = 3,
+		kCGEventRightMouseUp = 4,
+		kCGEventMouseMoved = 5,
+		kCGEventLeftMouseDragged = 6,
+		kCGEventRightMouseDragged = 7,
+		kCGEventKeyDown = 10,
+		kCGEventKeyUp = 11,
+		kCGEventFlagsChanged = 12,
+		kCGEventScrollWheel = 22,
+		kCGEventTabletPointer = 23,
+		kCGEventTabletProximity = 24,
+		kCGEventOtherMouseDown = 25,
+		kCGEventOtherMouseUp = 26,
+		kCGEventOtherMouseDragged = 27,
+		kCGEventTapDisabledByTimeout = 0xFFFFFFFE,
+		kCGEventTapDisabledByUserInput = 0xFFFFFFFF
+	}
 }
 

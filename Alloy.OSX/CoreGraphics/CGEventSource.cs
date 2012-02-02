@@ -66,7 +66,7 @@ namespace MonoMac.CoreGraphics
 		
 		[DllImport(Constants.CoreGraphicsLibrary)]
 		extern static double CGEventSourceSecondsSinceLastEventType (CGEventSourceStateId source, CGEventType eventType);
-		public static double SecondsSinceLastEventType (CGEventSourceGetTypeID source, CGEventType eventType)
+		public static double SecondsSinceLastEventType (CGEventSourceStateId source, CGEventType eventType)
 		{
 			return CGEventSourceSecondsSinceLastEventType (source, eventType);
 		}

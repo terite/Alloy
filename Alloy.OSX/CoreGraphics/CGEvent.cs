@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace MonoMac.CoreGraphics
 {
@@ -42,6 +43,14 @@ namespace MonoMac.CoreGraphics
 		{
 			return new CGEvent(CGEventCreateKeyboardEvent(IntPtr.Zero, virtualKey, keyDown));
 		}
+		
+		[DllImport(Constants.CoreGraphicsLibrary)]
+		extern static IntPtr CGEventCreateMouseEvent(IntPtr s, CGEventType t, PointF point, CGMouseButton button);
+		public static CGEvent CreateMouseEvent (CGEventSource source, CGEventType type, PointF position, CGMouseButton button)
+		{
+			IntPtr p = CGEventCreateMouseEvent(source, type, position, button);
+			return new CGEvent(p);
+		}		
 		
 		[DllImport(Constants.CoreGraphicsLibrary)]
 		extern static void CGEventSetFlags(IntPtr e, CGEventFlags flags);

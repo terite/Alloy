@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,7 +10,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Alloy.OSX</RootNamespace>
     <AssemblyName>Alloy.OSX</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -38,10 +37,18 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="MonoMac, Version=0.0.0.0, Culture=neutral">
+      <Package>monodevelop-core-mac-addins</Package>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OSXMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CoreGraphics\CGEnums.cs" />
+    <Compile Include="CoreGraphics\CGEvent.cs" />
+    <Compile Include="CoreGraphics\CGEventSource.cs" />
+    <Compile Include="CoreGraphics\CGEventTap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Alloy\Alloy.csproj">
@@ -57,4 +64,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="CoreGraphics\" />
+  </ItemGroup>
 </Project>
