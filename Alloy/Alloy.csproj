@@ -52,7 +52,6 @@
     <Compile Include="Messages\KeyboardEventMessage.cs" />
     <Compile Include="Messages\MouseEventMessage.cs" />
     <Compile Include="Messages\ScreenChangedMessage.cs" />
-    <Compile Include="MouseButton.cs" />
     <Compile Include="MouseEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screen.cs" />

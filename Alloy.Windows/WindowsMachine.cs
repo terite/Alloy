@@ -105,8 +105,8 @@ namespace Alloy.Windows
 
 		private Position GetNormalizedPosition (Point point)
 		{
-			ushort x = (ushort)(point.X + this.virtualX);
-			ushort y = (ushort)(point.Y + this.virtualY);
+			short x = (short)(point.X + this.virtualX);
+			short y = (short)(point.Y + this.virtualY);
 			return new Position (x, y);
 		}
 
