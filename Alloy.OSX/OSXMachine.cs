@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using MonoMac.AppKit;
 using MonoMac.CoreGraphics;
 
@@ -42,10 +43,32 @@ namespace Alloy.OSX
 		{
 			throw new NotImplementedException();
 		}
-
+		
+		/// <exception cref='NotImplementedException'>
+		/// Is thrown for some MouseEventTypes
+		/// </exception>
 		public void InvokeMouseEvent (MouseEvent ev)
 		{
-			throw new NotImplementedException();			
+			CGEventType type;
+			CGMouseButton button;
+			
+			switch (ev.Type) {
+			case MouseEventType.Move:
+				type = CGEventType.kCGEventMouseMoved;
+				break;
+			
+			default:
+				throw new NotImplementedException();
+			}
+			
+			PointF point = new PointF {
+				X = ev.Position.X,
+				Y = ev.Position.Y
+			};
+			CGEventSource source = new CGEventSource(CGEventSourceStateId.HIDSystemState);
+			
+			var cge = CGEvent.CreateMouseEvent(source, type, point, button);
+			cge.Post(CGEventTapLocation.HIDEventTap);
 		}
 
 		public void InvokeKeyboardEvent (KeyboardEvent ev)
