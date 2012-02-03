@@ -48,7 +48,7 @@ namespace MonoMac.CoreGraphics
 		extern static IntPtr CGEventCreateMouseEvent(IntPtr s, CGEventType t, PointF point, CGMouseButton button);
 		public static CGEvent CreateMouseEvent (CGEventSource source, CGEventType type, PointF position, CGMouseButton button)
 		{
-			IntPtr p = CGEventCreateMouseEvent(source, type, position, button);
+			IntPtr p = CGEventCreateMouseEvent(source.handle, type, position, button);
 			return new CGEvent(p);
 		}		
 		
