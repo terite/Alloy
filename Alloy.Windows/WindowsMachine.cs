@@ -177,10 +177,64 @@ namespace Alloy.Windows
 					return KeyCode.E;
 				case Keys.F:
 					return KeyCode.F;
+				case Keys.G:
+					return KeyCode.G;
+				case Keys.H:
+					return KeyCode.H;
+				case Keys.I:
+					return KeyCode.I;
+				case Keys.J:
+					return KeyCode.J;
+				case Keys.K:
+					return KeyCode.K;
+				case Keys.L:
+					return KeyCode.L;
+				case Keys.M:
+					return KeyCode.M;
+				case Keys.N:
+					return KeyCode.N;
+				case Keys.O:
+					return KeyCode.O;
+				case Keys.P:
+					return KeyCode.P;
+				case Keys.Q:
+					return KeyCode.Q;
+				case Keys.R:
+					return KeyCode.R;
+				case Keys.S:
+					return KeyCode.S;
+				case Keys.T:
+					return KeyCode.T;
+				case Keys.U:
+					return KeyCode.U;
+				case Keys.V:
+					return KeyCode.V;
+				case Keys.W:
+					return KeyCode.W;
+				case Keys.X:
+					return KeyCode.X;
+				case Keys.Y:
+					return KeyCode.Y;
+				case Keys.Z:
+					return KeyCode.Z;
 				case Keys.LControlKey:
 					return KeyCode.LeftControl;
 				case Keys.RControlKey:
 					return KeyCode.RightControl;
+				case Keys.LShiftKey:
+					return KeyCode.LeftShift;
+				case Keys.RShiftKey:
+					return KeyCode.RightShift;
+				case Keys.LWin:
+					return KeyCode.LeftWindows;
+				case Keys.RWin:
+					return KeyCode.RightWindows;
+				case Keys.OemOpenBrackets:
+					return KeyCode.LeftBracket;
+				case Keys.OemCloseBrackets:
+					return KeyCode.RightBracket;
+				case Keys.Alt:
+					return KeyCode.LeftAlt;
 
 				default:
 					return KeyCode.None;
