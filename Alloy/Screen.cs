@@ -3,12 +3,32 @@ using Tempest;
 
 namespace Alloy
 {
-	public sealed class Screen
+	public class Screen
 	{
-		public Screen (int height, int width)
+		public Screen (string name, int height, int width)
 		{
+			Name = name;
 			Height = height;
 			Width = width;
+		}
+
+		public Screen (Screen screen)
+		{
+			if (screen == null)
+				throw new ArgumentNullException ("screen");
+
+			Name = screen.Name;
+			Height = screen.Height;
+			Width = screen.Width;
+		}
+
+		/// <summary>
+		/// Gets the name of the screen.
+		/// </summary>
+		public string Name
+		{
+			get;
+			private set;
 		}
 
 		/// <summary>
@@ -40,13 +60,14 @@ namespace Alloy
 			if (element == null)
 				throw new ArgumentNullException ("element");
 
+			writer.WriteString (element.Name);
 			writer.WriteInt32 (element.Height);
 			writer.WriteInt32 (element.Width);
 		}
 
 		public Screen Deserialize (ISerializationContext context, IValueReader reader)
 		{
-			return new Screen (reader.ReadInt32(), reader.ReadInt32());
+			return new Screen (reader.ReadString(), reader.ReadInt32(), reader.ReadInt32());
 		}
 	}
 }

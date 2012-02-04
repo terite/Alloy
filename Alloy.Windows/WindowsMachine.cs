@@ -11,7 +11,7 @@ namespace Alloy.Windows
 	{
 		public WindowsMachine()
 		{
-			this.virtualScreen = new Screen (Interop.GetSystemMetrics (SystemMetric.VirtualScreenHeight), Interop.GetSystemMetrics (SystemMetric.VirtualScreenWidth));
+			this.virtualScreen = new Screen (Environment.MachineName, Interop.GetSystemMetrics (SystemMetric.VirtualScreenHeight), Interop.GetSystemMetrics (SystemMetric.VirtualScreenWidth));
 			this.virtualX = Math.Abs (Interop.GetSystemMetrics (SystemMetric.XVirtualScreen));
 			this.virtualY = Math.Abs (Interop.GetSystemMetrics (SystemMetric.YVirtualScreen));
 

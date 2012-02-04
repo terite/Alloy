@@ -6,16 +6,7 @@ namespace Alloy.Messages
 	public sealed class ScreenChangedMessage
 		: AlloyMessage
 	{
-		public ScreenChangedMessage (Screen screen)
-			: this()
-		{
-			if (screen == null)
-				throw new ArgumentNullException ("screen");
-
-			Screen = screen;
-		}
-
-		private ScreenChangedMessage()
+		public ScreenChangedMessage()
 			: base (AlloyMessageType.ScreenChanged)
 		{
 		}
@@ -23,7 +14,7 @@ namespace Alloy.Messages
 		public Screen Screen
 		{
 			get;
-			private set;
+			set;
 		}
 
 		public override void WritePayload (ISerializationContext context, IValueWriter writer)

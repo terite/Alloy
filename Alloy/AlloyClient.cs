@@ -35,6 +35,7 @@ namespace Alloy
 						return Connection.SendFor<ConnectResultMessage> (new ConnectMessage { Password = password })
 							.ContinueWith (ct =>
 							{
+								OnMachineScreensChanged (null, EventArgs.Empty);
 								switch (ct.Result.Result)
 								{
 									case ConnectResult.Success:
@@ -112,7 +113,7 @@ namespace Alloy
 
 		private void ChangeScreens()
 		{
-			this.connection.Send (new ScreenChangedMessage (this.machine.Screen));
+			this.connection.Send (new ScreenChangedMessage { Screen = this.machine.Screen });
 		}
 	}
 }
