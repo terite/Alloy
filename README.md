@@ -1,2 +1,7 @@
 ## Alloy
-[Version Plan](https://docs.google.com/document/d/1sZKuV6YXsmbd7J_iF_2EGFzDdniKoM6IRREfXhVl_7U/edit?hl=en_US)
+Alloy is an open source application to enable the simple
+and seamless use of a single keyboard and mouse across
+multiple computers on various operating systems.
+
+Alloy requires .NET 4 on Windows and Mono 2.10 on OSX
+and is licensed under the GPL v3 license.
