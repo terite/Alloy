@@ -30,9 +30,12 @@ namespace Alloy.OSX
 		public event EventHandler<KeyboardEventArgs> KeyboardEvent;
 		public event EventHandler ScreenChanged;
 		
+		private CGEventSource Source;
+		
 		public OSXMachine ()
 		{
 			NSApplication.Init();
+			Source = new CGEventSource(CGEventSourceStateId.HIDSystemState);
 		}
 		
 		public Screen Screen
@@ -43,7 +46,7 @@ namespace Alloy.OSX
 				var f = NSScreen.Screens[0].Frame;
 				
 				//return new Screen((int)f.Height, (int)f.Width);
-				return new Screen((int)f.Height, (int)f.Width);
+				return new Screen("Main Screen", (int)f.Height, (int)f.Width);
 			}
 		}
 
@@ -68,24 +71,40 @@ namespace Alloy.OSX
 		public void InvokeMouseEvent (MouseEvent ev)
 		{
 			CGEventType type;
-			CGMouseButton button;
+			CGMouseButton button = CGMouseButton.Left;
 			
 			switch (ev.Type) {
-			case MouseEventType.Move:
-				type = CGEventType.kCGEventMouseMoved;
-				break;
+				case MouseEventType.Move:
+					type = CGEventType.kCGEventMouseMoved;
+					break;
 			
-			default:
-				throw new NotImplementedException();
+				case MouseEventType.LeftDown:
+					type = CGEventType.kCGEventLeftMouseDown;
+					break;
+				
+				case MouseEventType.LeftUp:
+					type = CGEventType.kCGEventLeftMouseUp;
+					break;
+				
+				case MouseEventType.RightDown:
+					type = CGEventType.kCGEventRightMouseDown;
+					button = CGMouseButton.Right;
+					break;
+				
+				case MouseEventType.RightUp:
+					type = CGEventType.kCGEventRightMouseUp;
+					button = CGMouseButton.Right;
+					break;
+				default:
+					throw new NotImplementedException();
 			}
 			
 			PointF point = new PointF {
 				X = ev.Position.X,
 				Y = ev.Position.Y
 			};
-			CGEventSource source = new CGEventSource(CGEventSourceStateId.HIDSystemState);
 			
-			var cge = CGEvent.CreateMouseEvent(source, type, point, button);
+			var cge = CGEvent.CreateMouseEvent(Source, type, point, button);
 			cge.Post(CGEventTapLocation.HIDEventTap);
 		}
 
