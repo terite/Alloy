@@ -64,12 +64,13 @@ namespace Alloy.OSX
 		{
 			throw new NotImplementedException();
 		}
-		
+
 		/// <exception cref='NotImplementedException'>
 		/// Is thrown for some MouseEventTypes
 		/// </exception>
 		public void InvokeMouseEvent (MouseEvent ev)
 		{
+			// TODO: Special logic for detecting double click.
 			CGEventType type;
 			CGMouseButton button = CGMouseButton.Left;
 			
