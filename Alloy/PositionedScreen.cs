@@ -69,6 +69,16 @@ namespace Alloy
 			get;
 			set;
 		}
+
+		public double AlloyXRatio
+		{
+			get { return ((double) AlloyWidth / Width); }
+		}
+
+		public double AlloyYRatio
+		{
+			get { return ((double) AlloyHeight / Height); }
+		}
 	}
 
 	public class PositionedScreenSerializer
