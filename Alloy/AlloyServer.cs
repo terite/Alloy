@@ -47,7 +47,8 @@ namespace Alloy
 			this.RegisterMessageHandler<KeyboardEventMessage> (OnKeyboardEventMessage);
 			this.RegisterMessageHandler<ScreenChangedMessage> (OnScreenChangedMessage);
 
-			this.manager = new ScreenManager (new[] { new PositionedScreen (hostMachine.Screen) });
+			this.manager = new ScreenManager (new PositionedScreen (hostMachine.Screen));
+
 			this.manager.ActiveScreenChanged += OnActiveScreenChanged;
 		}
 
@@ -118,13 +119,22 @@ namespace Alloy
 		private Position centerPosition;
 		private void OnMouseEvent (object sender, MouseEventArgs e)
 		{
+			int dx = e.Event.Position.X - this.lastx;
+			int dy = e.Event.Position.Y - this.lasty;
+			this.manager.UpdateMouse (dx, dy);
+
 			IConnection connection;
-			if (!TryGetScreenConnection (this.manager.ActiveScreen, out connection))
+			if (TryGetScreenConnection (this.manager.ActiveScreen, out connection))
 			{
-				this.machine.InvokeMouseEvent (new MouseEvent (MouseEventType.Move, this.centerPosition));
+				//this.machine.InvokeMouseEvent (new MouseEvent (MouseEventType.Move, this.centerPosition));
 
 				this.lastx = 0;
 				this.lasty = 0;
+
+				connection.Send (new MouseEventMessage
+				{
+					Event = new MouseEvent (e.Event.Type, new Position ((short)dx, (short)dy))
+				});
 			}
 			else
 			{
@@ -157,7 +167,7 @@ namespace Alloy
 			else
 				SetActive (false);
 
-			if (TryGetScreenConnection (e.OldScreen, out connection))
+			if (TryGetScreenConnection (this.manager.ActiveScreen, out connection))
 				connection.Send (new MachineStateMessage { IsActive = true });
 			else
 				SetActive (true);
