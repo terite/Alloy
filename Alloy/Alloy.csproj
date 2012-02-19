@@ -42,6 +42,7 @@
     <Compile Include="AlloyClient.cs" />
     <Compile Include="AlloyProtocol.cs" />
     <Compile Include="AlloyServer.cs" />
+    <Compile Include="BidirectionalDictionary.cs" />
     <Compile Include="IMachine.cs" />
     <Compile Include="KeyboardEvent.cs" />
     <Compile Include="KeyCode.cs" />
