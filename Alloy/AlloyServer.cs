@@ -21,6 +21,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Alloy.Messages;
+using Cadenza.Collections;
 using Tempest;
 
 namespace Alloy
@@ -35,23 +36,23 @@ namespace Alloy
 				throw new ArgumentNullException ("hostMachine");
 
 			this.machine = hostMachine;
+			this.machine.MouseEvent += OnMouseEvent;
+			this.machine.KeyboardEvent += OnKeyboardEvent;
+			this.machine.ScreenChanged += OnMachineScreenChanged;
+			
+			this.centerPosition = new Position ((short)(this.machine.Screen.Height / 2), (short)(this.machine.Screen.Width / 2));
 
 			this.RegisterMessageHandler<ConnectMessage> (OnConnectMessage);
 			this.RegisterMessageHandler<MouseEventMessage> (OnMouseEventMessage);
 			this.RegisterMessageHandler<KeyboardEventMessage> (OnKeyboardEventMessage);
 			this.RegisterMessageHandler<ScreenChangedMessage> (OnScreenChangedMessage);
 
-			Screen = new AlloyScreen (new[] { new PositionedScreen (hostMachine.Screen) });
+			this.manager = new ScreenManager (new[] { new PositionedScreen (hostMachine.Screen) });
+			this.manager.ActiveScreenChanged += OnActiveScreenChanged;
 		}
 
 		public event EventHandler<ScreenEventArgs> ScreenJoined;
-
-		public AlloyScreen Screen
-		{
-			get;
-			private set;
-		}
-
+		
 		public string ServerPassword
 		{
 			get;
@@ -70,18 +71,97 @@ namespace Alloy
 			set;
 		}
 
-		public void RestorePositions (IEnumerable<PositionedScreen> positionedScreens)
+		public int Width
 		{
-			throw new NotSupportedException();
+			get { return this.manager.Width; }
+		}
+
+		public override void Start()
+		{
+			base.Start();
+
+			this.machine.StartListening();
+		}
+
+		/// <summary>
+		/// Updates existing and future screen positions.
+		/// </summary>
+		/// <param name="positionedScreens">Screen positions</param>
+		/// <remarks>
+		/// Use this method to set connected screen positions, as well as
+		/// restoring saved positions for screens that have not yet connected.
+		/// </remarks>
+		public void SetPositions (IEnumerable<PositionedScreen> positionedScreens)
+		{
 			if (positionedScreens == null)
 				throw new ArgumentNullException ("positionedScreens");
 
-			this.restore = positionedScreens.ToArray();
+			manager.UpdateScreens (positionedScreens);
 		}
 
-		private PositionedScreen[] restore;
+		private readonly ScreenManager manager;
 		private readonly IMachine machine;
-		private readonly ConcurrentDictionary<IConnection, Screen> connectionScreens = new ConcurrentDictionary<IConnection, Screen>();
+		private readonly BidirectionalDictionary<IConnection, Screen> screens = new BidirectionalDictionary<IConnection, Screen>();
+
+		private void OnKeyboardEvent (object sender, KeyboardEventArgs e)
+		{
+			IConnection connection;
+			if (!TryGetScreenConnection (this.manager.ActiveScreen, out connection))
+				return;
+			
+			e.Handled = true;
+			connection.Send (new KeyboardEventMessage { Event = e.Event });
+		}
+
+		private int lastx, lasty;
+
+		private Position centerPosition;
+		private void OnMouseEvent (object sender, MouseEventArgs e)
+		{
+			IConnection connection;
+			if (!TryGetScreenConnection (this.manager.ActiveScreen, out connection))
+			{
+				this.machine.InvokeMouseEvent (new MouseEvent (MouseEventType.Move, this.centerPosition));
+
+				this.lastx = 0;
+				this.lasty = 0;
+			}
+			else
+			{
+				this.lastx = e.Event.Position.X;
+				this.lasty = e.Event.Position.Y;
+			}
+		}
+
+		private bool TryGetScreenConnection (Screen screen, out IConnection connection)
+		{
+			lock (this.screens)
+				return this.screens.TryGetKey (screen, out connection);
+		}
+
+		private void OnMachineScreenChanged (object sender, EventArgs eventArgs)
+		{
+			this.centerPosition = new Position ((short)(this.machine.Screen.Height / 2), (short)(this.machine.Screen.Width / 2));
+		}
+
+		private void SetActive (bool isActive)
+		{
+			this.machine.SetCursorVisibility (isActive);
+		}
+		
+		private void OnActiveScreenChanged (object sender, ActiveScreenChangedEventArgs e)
+		{
+			IConnection connection;
+			if (TryGetScreenConnection (e.OldScreen, out connection))
+				connection.Send (new MachineStateMessage { IsActive = false });
+			else
+				SetActive (false);
+
+			if (TryGetScreenConnection (e.OldScreen, out connection))
+				connection.Send (new MachineStateMessage { IsActive = true });
+			else
+				SetActive (true);
+		}
 
 		private void OnConnectMessage (MessageEventArgs<ConnectMessage> e)
 		{
@@ -113,9 +193,12 @@ namespace Alloy
 
 		private void OnScreenChangedMessage (MessageEventArgs<ScreenChangedMessage> e)
 		{
-			Screen old;
-			bool removed = this.connectionScreens.TryRemove (e.Connection, out old);
-			this.connectionScreens[e.Connection] = e.Message.Screen;
+			bool removed;
+			lock (this.screens)
+			{
+				removed = this.screens.Remove (e.Connection);
+				this.screens[e.Connection] = e.Message.Screen;
+			}
 
 			if (!removed)
 			{
