@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -7,12 +8,13 @@ namespace Alloy
 {
 	internal class ScreenManager
 	{
-		internal ScreenManager (IEnumerable<PositionedScreen> positionedScreens)
+		internal ScreenManager (PositionedScreen serverScreen)
 		{
-			if (positionedScreens == null)
-				throw new ArgumentNullException ("positionedScreens");
+			if (serverScreen == null)
+				throw new ArgumentNullException ("serverScreen");
 
-			UpdateScreens (positionedScreens);
+			ActiveScreen = serverScreen;
+			UpdateScreens (new[] { serverScreen });
 		}
 
 		public event EventHandler<ActiveScreenChangedEventArgs> ActiveScreenChanged;
@@ -60,11 +62,10 @@ namespace Alloy
 			int currentX = CursorX + deltaX;
 			int currentY = CursorY + deltaY;
 
-			PositionedScreen screen = GetScreenForCoordinates (currentX, currentY);
-			if (screen == null)
-				throw new InvalidOperationException ("Coordinates outside Alloy screen");
+			//Trace.WriteLine (String.Format ("D: {0},{1}  C: {2},{3}", deltaX, deltaY, currentX, currentY));
 
-			if (screen != ActiveScreen)
+			PositionedScreen screen = GetScreenForCoordinates (currentX, currentY);
+			if (screen != null && screen != ActiveScreen)
 			{
 				int overshotX = (currentX - screen.AlloyX);
 				int overshotY = (currentY - screen.AlloyY);
@@ -98,9 +99,9 @@ namespace Alloy
 			for (int i = 0; i < screens.Length; ++i)
 			{
 				PositionedScreen s = screens[i];
-				if (s.AlloyX > x || s.AlloyX + s.AlloyWidth > x)
+				if (s.AlloyX > x || x > s.AlloyX + s.AlloyWidth)
 					continue;
-				if (s.AlloyY > y || s.AlloyY + s.AlloyHeight > y)
+				if (s.AlloyY > y || y > s.AlloyY + s.AlloyHeight)
 					continue;
 
 				return s;
@@ -114,15 +115,15 @@ namespace Alloy
 			if (positions == null)
 				throw new ArgumentNullException ("positions");
 
-			PositionedScreen[] screens = positions.ToArray();
+			HashSet<PositionedScreen> screens = new HashSet<PositionedScreen> (positions);
+			if (this.positionedScreens != null)
+				screens.UnionWith (this.positionedScreens);
 
-			PositionedScreen right = screens[0];
-			PositionedScreen bottom = screens[0];
+			PositionedScreen right = screens.First();
+			PositionedScreen bottom = right;
 
-			for (int i = 1; i < screens.Length; ++i)
+			foreach (PositionedScreen ps in screens)
 			{
-				PositionedScreen ps = screens[i];
-
 				if (ps.AlloyX >= right.AlloyX && ps.Width >= right.Width)
 					right = ps;
 				if (ps.AlloyY >= bottom.AlloyY && ps.Height >= bottom.Height)
@@ -132,7 +133,7 @@ namespace Alloy
 			Width = right.AlloyX + right.AlloyWidth;
 			Height = bottom.AlloyY + bottom.AlloyHeight;
 
-			this.positionedScreens = screens;
+			this.positionedScreens = screens.ToArray();
 		}
 
 		private PositionedScreen[] positionedScreens;
