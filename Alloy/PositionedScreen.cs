@@ -32,6 +32,8 @@ namespace Alloy
 		public PositionedScreen (Screen screen)
 			: base (screen)
 		{
+			AlloyHeight = screen.Height;
+			AlloyWidth = screen.Width;
 		}
 
 		/// <summary>
