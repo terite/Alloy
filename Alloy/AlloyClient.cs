@@ -17,59 +17,32 @@
  */
 
 using System;
-using System.Net;
-using System.Threading.Tasks;
 using Alloy.Messages;
 using Tempest;
+using Tempest.Providers.Network;
 
 namespace Alloy
 {
 	public sealed class AlloyClient
 		: ClientBase
 	{
-		public AlloyClient (IMachine machine, IClientConnection clientConnection)
-			: base (clientConnection, MessageTypes.Reliable)
+		public AlloyClient (IMachine machine)
+			: base (new NetworkClientConnection (AlloyProtocol.Instance), MessageTypes.Reliable)
 		{
 			if (machine == null)
 				throw new ArgumentNullException ("machine");
 
 			this.machine = machine;
 			this.machine.ScreenChanged += OnMachineScreensChanged;
-			this.machine.KeyboardEvent += OnKeyboardEvent;
-			this.machine.MouseEvent += OnMouseEvent;
+			//this.machine.KeyboardEvent += OnKeyboardEvent;
+			//this.machine.MouseEvent += OnMouseEvent;
 
 			this.RegisterMessageHandler<MachineStateMessage> (OnMachineStateMessage);
 			this.RegisterMessageHandler<MouseEventMessage> (OnMouseEventMessage);
 			this.RegisterMessageHandler<KeyboardEventMessage> (OnKeyboardEventMessage);
 		}
 
-		public Task<ConnectionResult> ConnectAsync (EndPoint endPoint, string password)
-		{
-			this.password = password;
-			return ConnectAsync (endPoint)
-				.ContinueWith (t =>
-				{
-					if (t.Result == ConnectionResult.Success)
-					{
-						return Connection.SendFor<ConnectResultMessage> (new ConnectMessage { Password = password })
-							.ContinueWith (ct =>
-							{
-								OnMachineScreensChanged (null, EventArgs.Empty);
-								switch (ct.Result.Result)
-								{
-									case ConnectResult.Success:
-										return ConnectionResult.Success;
-									case ConnectResult.FailedPassword:
-										return ConnectionResult.FailedHandshake;
-									default:
-										return ConnectionResult.FailedUnknown;
-								}
-							}).Result;
-					}
-
-					return t.Result;
-				});
-		}
+		public const string FailedPasswordReason = "FailedPassword";
 
 		private string password;
 		private readonly IMachine machine;
@@ -77,25 +50,56 @@ namespace Alloy
 
 		private Position lastPosition;
 
-		private void OnMouseEvent (object sender, MouseEventArgs e)
+		protected override void OnConnected (ClientConnectionEventArgs e)
 		{
-			this.lastPosition = e.Event.Position;
+			base.OnConnected (e);
 
-			if (!this.isActive)
-				return;
+			Connection.SendFor<ConnectResultMessage> (new ConnectMessage { Password = password })
+				.ContinueWith (ct =>
+				{
+					OnMachineScreensChanged (null, EventArgs.Empty);
+					switch (ct.Result.Result)
+					{
+						case ConnectResult.FailedPassword:
+							DisconnectWithReason (FailedPasswordReason);
+							break;
 
-			e.Handled = true;
-			this.connection.Send (new MouseEventMessage { Event = e.Event });
+						case ConnectResult.FailedUnknown:
+							Disconnect (now: true);
+							break;
+
+						case ConnectResult.Success:
+							SetActive (true);
+							break;
+					}
+				});
 		}
 
-		private void OnKeyboardEvent (object sender, KeyboardEventArgs e)
+		public override void Disconnect (bool now)
 		{
-			if (!this.isActive)
-				return;
-
-			e.Handled = true;
-			this.connection.Send (new KeyboardEventMessage { Event = e.Event });
+			SetActive (false);
+			base.Disconnect (now);
 		}
+
+		//private void OnMouseEvent (object sender, MouseEventArgs e)
+		//{
+		//    this.lastPosition = e.Event.Position;
+
+		//    if (!this.isActive)
+		//        return;
+
+		//    e.Handled = true;
+		//    this.connection.Send (new MouseEventMessage { Event = e.Event });
+		//}
+
+		//private void OnKeyboardEvent (object sender, KeyboardEventArgs e)
+		//{
+		//    if (!this.isActive)
+		//        return;
+
+		//    e.Handled = true;
+		//    this.connection.Send (new KeyboardEventMessage { Event = e.Event });
+		//}
 
 		private void OnKeyboardEventMessage (MessageEventArgs<KeyboardEventMessage> e)
 		{
@@ -122,13 +126,18 @@ namespace Alloy
 
 		private void OnMachineStateMessage (MessageEventArgs<MachineStateMessage> e)
 		{
-			this.isActive = e.Message.IsActive;
-			this.machine.SetCursorVisibility (e.Message.IsActive);
+			SetActive (e.Message.IsActive);
 		}
 
 		private void OnMachineScreensChanged (object sender, EventArgs e)
 		{
 			ChangeScreens();
+		}
+
+		private void SetActive (bool active)
+		{
+			this.isActive = active;
+			this.machine.SetCursorVisibility (active);
 		}
 
 		private void ChangeScreens()
