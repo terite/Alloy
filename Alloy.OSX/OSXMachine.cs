@@ -76,24 +76,24 @@ namespace Alloy.OSX
 			
 			switch (ev.Type) {
 				case MouseEventType.Move:
-					type = CGEventType.kCGEventMouseMoved;
+					type = CGEventType.MouseMoved;
 					break;
 			
 				case MouseEventType.LeftDown:
-					type = CGEventType.kCGEventLeftMouseDown;
+					type = CGEventType.LeftMouseDown;
 					break;
 				
 				case MouseEventType.LeftUp:
-					type = CGEventType.kCGEventLeftMouseUp;
+					type = CGEventType.LeftMouseUp;
 					break;
 				
 				case MouseEventType.RightDown:
-					type = CGEventType.kCGEventRightMouseDown;
+					type = CGEventType.RightMouseDown;
 					button = CGMouseButton.Right;
 					break;
 				
 				case MouseEventType.RightUp:
-					type = CGEventType.kCGEventRightMouseUp;
+					type = CGEventType.RightMouseUp;
 					button = CGMouseButton.Right;
 					break;
 				default:
