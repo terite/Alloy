@@ -1,3 +1,6 @@
 [submodule "Tempest"]
 	path = Tempest
 	url = git://github.com/ermau/Tempest.git
+[submodule "Alloy.OSX/alloy-monomac-dll"]
+	path = Alloy.OSX/alloy-monomac-dll
+	url = https://github.com/terite/alloy-monomac-dll
