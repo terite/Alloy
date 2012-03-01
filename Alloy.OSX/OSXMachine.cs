@@ -22,6 +22,8 @@ using MonoMac.AppKit;
 using MonoMac.CoreGraphics;
 using MonoMac.CoreFoundation;
 using System.Threading;
+using MonoMac;
+using System.Runtime.InteropServices;
 
 namespace Alloy.OSX
 {
@@ -83,48 +85,46 @@ namespace Alloy.OSX
 			NSCursor.SetHiddenUntilMouseMoves(!visible);
 		}
 
+		[DllImport(Constants.CoreGraphicsLibrary)]
+		extern public static CGError CGPostMouseEvent (PointF point, bool updatePosition, UInt32 buttonCount, bool down);
+
 		/// <exception cref='NotImplementedException'>
 		/// Is thrown for some MouseEventTypes
 		/// </exception>
 		public void InvokeMouseEvent (MouseEvent ev)
 		{
-			// TODO: Special logic for detecting double click.
-			CGEventType type;
-			CGMouseButton button = CGMouseButton.Left;
+			UInt32 button = 1;
+			var down = false;
 			
 			switch (ev.Type) {
 				case MouseEventType.Move:
-					type = CGEventType.MouseMoved;
 					break;
 			
 				case MouseEventType.LeftDown:
-					type = CGEventType.LeftMouseDown;
+					down = true;
 					break;
 				
 				case MouseEventType.LeftUp:
-					type = CGEventType.LeftMouseUp;
 					break;
 				
 				case MouseEventType.RightDown:
-					type = CGEventType.RightMouseDown;
-					button = CGMouseButton.Right;
+					button = 2;
+					down = true;
 					break;
 				
 				case MouseEventType.RightUp:
-					type = CGEventType.RightMouseUp;
-					button = CGMouseButton.Right;
+					button = 2;
 					break;
 				default:
-					throw new NotImplementedException();
+					throw new NotImplementedException(ev.ToString());
 			}
 			
 			PointF point = new PointF {
 				X = ev.Position.X,
 				Y = ev.Position.Y
 			};
-			
-			var cge = CGEvent.CreateMouseEvent(Source, type, point, button);
-			cge.Post(CGEventTapLocation.HIDEventTap);
+
+			CGPostMouseEvent(point, true, button, down);
 		}
 
 		public void InvokeKeyboardEvent (KeyboardEvent ev)
