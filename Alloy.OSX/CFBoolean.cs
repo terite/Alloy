@@ -5,20 +5,14 @@ namespace MonoMac.CoreFoundation
 {
 	public class CFBoolean
 	{
-		public IntPtr Handle;
+		internal readonly IntPtr Handle;
 
+		// TODO: We should use kCFBoolean(True|False) instead.
 		[DllImport(Constants.CoreGraphicsLibrary)]
 		extern internal static IntPtr CGSCreateBoolean (bool b);
 
-		public static CFBoolean False
-		{
-			get { return new CFBoolean(CGSCreateBoolean(false)); }
-
-		}
-		public static CFBoolean True
-		{
-			get { return new CFBoolean(CGSCreateBoolean(true)); }
-		}
+		public readonly static CFBoolean False = new CFBoolean(CGSCreateBoolean(false));
+		public readonly static CFBoolean True = new CFBoolean(CGSCreateBoolean(true));
 
 		public CFBoolean (IntPtr handle)
 		{
