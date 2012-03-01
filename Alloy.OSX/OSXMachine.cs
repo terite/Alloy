@@ -20,6 +20,7 @@ using System;
 using System.Drawing;
 using MonoMac.AppKit;
 using MonoMac.CoreGraphics;
+using System.Threading;
 
 namespace Alloy.OSX
 {
@@ -31,10 +32,18 @@ namespace Alloy.OSX
 		public event EventHandler ScreenChanged;
 		
 		private CGEventSource Source;
+		private NSApplication Application;
 		
 		public OSXMachine ()
 		{
+			var blocker = new ManualResetEvent(false);
+			Application = new NSApplication();
+			Application.DidFinishLaunching += (sender, e) => {
+				blocker.Set();
+				Console.WriteLine("App did finish launching");
+			};
 			NSApplication.Init();
+			blocker.WaitOne(500);
 			Source = new CGEventSource(CGEventSourceStateId.HIDSystemState);
 		}
 		
