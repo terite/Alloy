@@ -20,6 +20,7 @@ using System;
 using System.Drawing;
 using MonoMac.AppKit;
 using MonoMac.CoreGraphics;
+using MonoMac.CoreFoundation;
 using System.Threading;
 
 namespace Alloy.OSX
@@ -36,6 +37,8 @@ namespace Alloy.OSX
 		
 		public OSXMachine ()
 		{
+			// TODO: I don't think this works exactly as intended but
+			// it does get rid of an occasional crash.
 			var blocker = new ManualResetEvent(false);
 			Application = new NSApplication();
 			Application.DidFinishLaunching += (sender, e) => {
@@ -71,7 +74,13 @@ namespace Alloy.OSX
 
 		public void SetCursorVisibility (bool visible)
 		{
-			throw new NotImplementedException();
+			CGSConnection.DefaultConnection().SetProperty(
+				CGSConnection.DefaultConnection(),
+				"SetsCursorInBackground",
+				CFBoolean.True
+			);
+
+			NSCursor.SetHiddenUntilMouseMoves(!visible);
 		}
 
 		/// <exception cref='NotImplementedException'>

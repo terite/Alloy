@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="OSXMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CGSConnection.cs" />
+    <Compile Include="CFBoolean.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Alloy\Alloy.csproj">
