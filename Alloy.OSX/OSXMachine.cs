@@ -58,7 +58,7 @@ namespace Alloy.OSX
 				var f = NSScreen.Screens[0].Frame;
 				
 				//return new Screen((int)f.Height, (int)f.Width);
-				return new Screen("Main Screen", (int)f.Height, (int)f.Width);
+				return new Screen(Environment.MachineName, (int)f.Height, (int)f.Width);
 			}
 		}
 
