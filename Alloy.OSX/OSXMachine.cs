@@ -18,11 +18,11 @@
 
 using System;
 using System.Drawing;
+using MonoMac;
 using MonoMac.AppKit;
 using MonoMac.CoreGraphics;
 using MonoMac.CoreFoundation;
 using System.Threading;
-using MonoMac;
 using System.Runtime.InteropServices;
 
 namespace Alloy.OSX
@@ -34,7 +34,7 @@ namespace Alloy.OSX
 		public event EventHandler<KeyboardEventArgs> KeyboardEvent;
 		public event EventHandler ScreenChanged;
 		
-		private CGEventSource Source;
+		//private CGEventSource Source;
 		private NSApplication Application;
 		
 		public OSXMachine ()
@@ -49,7 +49,7 @@ namespace Alloy.OSX
 			};
 			NSApplication.Init();
 			blocker.WaitOne(500);
-			Source = new CGEventSource(CGEventSourceStateId.HIDSystemState);
+			//Source = new CGEventSource(CGEventSourceStateId.HIDSystemState);
 		}
 		
 		public Screen Screen
