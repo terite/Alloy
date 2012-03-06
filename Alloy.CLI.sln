@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alloy", "Alloy\Alloy.csproj", "{EC090CA0-38F3-4218-A5E5-5604718B12D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alloy.Windows", "Alloy.Windows\Alloy.Windows.csproj", "{442FC6D9-749F-48FB-BFF0-8B69A17C742F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tempest", "Tempest\Desktop\Tempest\Tempest.csproj", "{D6A2003C-CBB2-47B0-B306-521141D3068D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alloy.OSX", "Alloy.OSX\Alloy.OSX.csproj", "{0D93133F-C0BE-4BA8-B6AB-F36F9F9495DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alloy.Clients.CLI", "Alloy.Clients.CLI\Alloy.Clients.CLI.csproj", "{9D94E6C6-3233-4D38-9C7A-5A539BE3351D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D93133F-C0BE-4BA8-B6AB-F36F9F9495DD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0D93133F-C0BE-4BA8-B6AB-F36F9F9495DD}.Debug|x86.Build.0 = Debug|Any CPU
+		{0D93133F-C0BE-4BA8-B6AB-F36F9F9495DD}.Release|x86.ActiveCfg = Release|Any CPU
+		{442FC6D9-749F-48FB-BFF0-8B69A17C742F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{442FC6D9-749F-48FB-BFF0-8B69A17C742F}.Debug|x86.Build.0 = Debug|Any CPU
+		{442FC6D9-749F-48FB-BFF0-8B69A17C742F}.Release|x86.ActiveCfg = Release|Any CPU
+		{9D94E6C6-3233-4D38-9C7A-5A539BE3351D}.Debug|x86.ActiveCfg = Debug|x86
+		{9D94E6C6-3233-4D38-9C7A-5A539BE3351D}.Debug|x86.Build.0 = Debug|x86
+		{9D94E6C6-3233-4D38-9C7A-5A539BE3351D}.Release|x86.ActiveCfg = Release|x86
+		{9D94E6C6-3233-4D38-9C7A-5A539BE3351D}.Release|x86.Build.0 = Release|x86
+		{D6A2003C-CBB2-47B0-B306-521141D3068D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D6A2003C-CBB2-47B0-B306-521141D3068D}.Debug|x86.Build.0 = Debug|Any CPU
+		{D6A2003C-CBB2-47B0-B306-521141D3068D}.Release|x86.ActiveCfg = Release|Any CPU
+		{EC090CA0-38F3-4218-A5E5-5604718B12D4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EC090CA0-38F3-4218-A5E5-5604718B12D4}.Debug|x86.Build.0 = Debug|Any CPU
+		{EC090CA0-38F3-4218-A5E5-5604718B12D4}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Alloy.Clients.CLI\Alloy.Clients.CLI.csproj
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

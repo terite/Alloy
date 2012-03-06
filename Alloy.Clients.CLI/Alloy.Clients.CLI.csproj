@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9D94E6C6-3233-4D38-9C7A-5A539BE3351D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Alloy.Clients.CLI</RootNamespace>
+    <AssemblyName>Alloy.Clients.CLI</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Options.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Alloy.OSX\Alloy.OSX.csproj">
+      <Project>{0D93133F-C0BE-4BA8-B6AB-F36F9F9495DD}</Project>
+      <Name>Alloy.OSX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Alloy\Alloy.csproj">
+      <Project>{EC090CA0-38F3-4218-A5E5-5604718B12D4}</Project>
+      <Name>Alloy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Alloy.Windows\Alloy.Windows.csproj">
+      <Project>{442FC6D9-749F-48FB-BFF0-8B69A17C742F}</Project>
+      <Name>Alloy.Windows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tempest\Desktop\Tempest\Tempest.csproj">
+      <Project>{D6A2003C-CBB2-47B0-B306-521141D3068D}</Project>
+      <Name>Tempest</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
