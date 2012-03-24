@@ -17,9 +17,13 @@
  */
 
 using System;
+using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using Alloy.Client;
 using Alloy.Windows;
+using Tempest;
 using Tempest.Providers.Network;
 
 namespace Alloy.Clients.Windows
@@ -27,8 +31,12 @@ namespace Alloy.Clients.Windows
 	internal class TestWindowViewModel
 		: ViewModelBase
 	{
+		private static string KeyPath =
+			Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData), "Alloy", "auth.key");
+
 		public TestWindowViewModel()
 		{
+			this.keyLoadTask = KeyManager.LoadKey (KeyPath);
 			this.startServer = new DelegatedCommand (StartServerHandler);
 			this.joinServer = new DelegatedCommand<string> (JoinServerHandler, s => !String.IsNullOrEmpty (s));
 		}
@@ -49,13 +57,17 @@ namespace Alloy.Clients.Windows
 		private AlloyServer server;
 		private AlloyClient client;
 
+		private Task<IAsymmetricKey> keyLoadTask;
+
 		private void StartServerHandler (object state)
 		{
-			this.server = new AlloyServer (new WindowsMachine());
-			this.server.AddConnectionProvider (new NetworkConnectionProvider (
-				AlloyProtocol.Instance, new IPEndPoint (IPAddress.Any, 42424), 100));
+			var provider = new NetworkConnectionProvider (new[] { AlloyProtocol.Instance }, new IPEndPoint (IPAddress.Any, 42424), 100,
+					KeyManager.CryptoFactory, this.keyLoadTask.Result);
 
-			this.server.SetPositions(new []
+			this.server = new AlloyServer (new WindowsMachine());
+			this.server.AddConnectionProvider (provider);
+
+			this.server.SetPositions (new []
 			{
 				new PositionedScreen ("vengeance", 1440, 900)
 				{
@@ -71,7 +83,7 @@ namespace Alloy.Clients.Windows
 
 		private void JoinServerHandler (string hostname)
 		{
-			this.client = new AlloyClient (new WindowsMachine());
+			this.client = new AlloyClient (new WindowsMachine(), KeyManager.CryptoFactory, this.keyLoadTask.Result);
 			this.client.ConnectAsync (new DnsEndPoint (hostname, 42424));
 		}
 	}

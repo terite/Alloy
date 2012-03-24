@@ -96,6 +96,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Alloy.Client\Alloy.Client.csproj">
+      <Project>{55C2C431-BB49-49FA-A061-ADE9EE010C2E}</Project>
+      <Name>Alloy.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Alloy.Windows\Alloy.Windows.csproj">
       <Project>{442FC6D9-749F-48FB-BFF0-8B69A17C742F}</Project>
       <Name>Alloy.Windows</Name>

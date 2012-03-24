@@ -23,32 +23,35 @@ using Tempest;
 
 namespace Alloy.Client
 {
-	public class KeyManager
+	public static class KeyManager
 	{
-		public Task<RSAAsymmetricKey> LoadKey (string path)
+		public static readonly Func<IPublicKeyCrypto> CryptoFactory = () => new RSACrypto();
+
+		public static Task<IAsymmetricKey> LoadKey (string path)
 		{
-			return Task<RSAAsymmetricKey>.Factory.StartNew (() =>
+			if (path == null)
+				throw new ArgumentNullException ("path");
+
+			return Task<IAsymmetricKey>.Factory.StartNew (() =>
 			{
-				if (!File.Exists (path))
-					return null;
+				if (!File.Exists (path) || new FileInfo (path).Length == 0)
+				{
+					var crypto = new RSACrypto();
+					var key = crypto.ExportKey (includePrivate: true);
+
+					Directory.CreateDirectory (Path.GetDirectoryName (path));
+					using (var fstream = File.OpenWrite (path))
+					{
+						var writer = new StreamValueWriter (fstream);
+						key.Serialize (null, writer);
+					}
+
+					return key;
+				}
 
 				var reader = new BufferValueReader (File.ReadAllBytes (path));
 				return new RSAAsymmetricKey (null, reader);
 			});
-		}
-
-		public Task SaveKey (RSAAsymmetricKey key, string path)
-		{
-			return Task.Factory.StartNew (s =>
-			{
-				RSAAsymmetricKey k = (RSAAsymmetricKey) s;
-
-				using (var fstream = File.OpenWrite (path))
-				{
-					var writer = new StreamValueWriter (fstream);
-					k.Serialize (null, writer);
-				}
-			}, key);
 		}
 	}
 }
