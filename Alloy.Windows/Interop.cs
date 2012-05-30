@@ -81,8 +81,12 @@ namespace Alloy.Windows
 		YScreen = 1,
 		XBorder = 5,
 		YBorder = 6,
+		XIcon = 11,
+		YIcon = 12,
 		XFullscreen = 16,
 		YFullscreen = 17,
+		XSmallIcon = 49,
+		YSmallIcon = 50,
 		XVirtualScreen = 76,
 		YVirtualScreen = 77,
 		VirtualScreenWidth = 78,
@@ -94,6 +98,9 @@ namespace Alloy.Windows
 	{
 		public const int WH_KEYBOARD = 2;
 		public const int WH_MOUSE = 7;
+
+		[DllImport ("user32.dll")]
+		public static extern long SetCursorPos (int x, int y);
 
 		[DllImport ("user32.dll")]
 		public static extern IntPtr GetForegroundWindow();

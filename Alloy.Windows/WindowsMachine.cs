@@ -68,12 +68,21 @@ namespace Alloy.Windows
 
 		public void InvokeMouseEvent (MouseEvent ev)
 		{
-			throw new NotImplementedException();
+			switch (ev.Type)
+			{
+				case MouseEventType.Move:
+					Interop.SetCursorPos (ev.Position.X, ev.Position.Y);
+					break;
+
+				default:
+					throw new NotImplementedException();
+			}
 		}
 
 		public void InvokeKeyboardEvent (KeyboardEvent ev)
 		{
-			INPUT input = TranslateKeyEvent (ev);
+			throw new NotImplementedException();
+			//INPUT input = TranslateKeyEvent (ev);
 			//Interop.SendInput (1, new[] { input }, );
 		}
 

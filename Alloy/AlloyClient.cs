@@ -42,6 +42,22 @@ namespace Alloy
 			this.RegisterMessageHandler<KeyboardEventMessage> (OnKeyboardEventMessage);
 		}
 
+		public AlloyClient (IMachine machine, Func<IPublicKeyCrypto> cryptoFactory, IAsymmetricKey key)
+			: base (new NetworkClientConnection (AlloyProtocol.Instance, cryptoFactory), MessageTypes.Reliable)
+		{
+			if (machine == null)
+				throw new ArgumentNullException ("machine");
+
+			this.machine = machine;
+			this.machine.ScreenChanged += OnMachineScreensChanged;
+			//this.machine.KeyboardEvent += OnKeyboardEvent;
+			//this.machine.MouseEvent += OnMouseEvent;
+
+			this.RegisterMessageHandler<MachineStateMessage> (OnMachineStateMessage);
+			this.RegisterMessageHandler<MouseEventMessage> (OnMouseEventMessage);
+			this.RegisterMessageHandler<KeyboardEventMessage> (OnKeyboardEventMessage);
+		}
+
 		public const string FailedPasswordReason = "FailedPassword";
 
 		private string password;

@@ -126,10 +126,10 @@ namespace Alloy
 			IConnection connection;
 			if (TryGetScreenConnection (this.manager.ActiveScreen, out connection))
 			{
-				//this.machine.InvokeMouseEvent (new MouseEvent (MouseEventType.Move, this.centerPosition));
+				this.machine.InvokeMouseEvent (new MouseEvent (MouseEventType.Move, this.centerPosition));
 
-				this.lastx = 0;
-				this.lasty = 0;
+				this.lastx = this.centerPosition.X;
+				this.lasty = this.centerPosition.Y;
 
 				connection.Send (new MouseEventMessage
 				{
